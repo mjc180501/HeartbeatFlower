@@ -1,0 +1,35 @@
+#include <Servo.h>
+
+Servo myServo;
+
+const int sensorPin = A0;
+const int servoPin = 2;
+
+const int threshold = 550;
+const int delay = 300;
+
+unsigned long last = 0;
+
+void setup() {
+  Serial.begin(9600);
+  myServo.attach(servoPin);
+  myServo.write(0);  // Start at 0 degrees
+}
+
+void loop() {
+  int sensorValue = analogRead(sensorPin);
+  unsigned long currentTime = millis();
+
+  Serial.println(sensorValue);
+
+  if (sensorValue > threshold && (currentTime - last) > delay) {
+    last = currentTime;
+
+    myServo.write(90);
+    delay(200);
+
+    myServo.write(0);
+  }
+
+  delay(20);
+}
